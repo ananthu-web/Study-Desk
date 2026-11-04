@@ -37,3 +37,5 @@ Production build and TypeScript checks passed. Automated Chrome checks covered 3
 Subjects frontend update: see [Subjects blueprint](subjects-blueprint.md). The shared Subjects landing placeholder has been replaced by the shelf/workspace frontend, with no change to authentication or study-data persistence.
 
 Saved subject integration: Your desk now reads authenticated MongoDB subjects, shows a real count and up to three recent subjects, and links into their saved workspaces. Sample desk retains fixtures. Goal/time/planner/calendar summaries are still previews. Subject load failures show Retry instead of a false empty state.
+
+Subjects completion update: the live subject workspace now has saved folders, B2 PDFs, links, quick notes, and recursive cleanup. Sample desk/subjects remain explicit fixtures. See Subjects and storage blueprints for deployment settings.

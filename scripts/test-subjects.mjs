@@ -63,13 +63,12 @@ try {
   const stored = await db.collection("subjects").findOne({ _id: (await import("mongodb")).ObjectId.createFromHexString(subject.id) });
   assert.equal(stored.userId, users[0].id); assert.equal(stored.normalisedName, "physics"); assert.ok(stored.updatedAt instanceof Date);
   await db.collection("notes").insertOne({ userId: users[0].id, subjectId: subject.id, body: "Test child" });
-  assert.equal((await a.request("/api/subjects/" + subject.id, "DELETE")).status, 409, "Do not orphan future materials");
+  assert.equal((await a.request("/api/subjects/" + subject.id, "DELETE")).status, 200, "Subject deletion cleans up notes");
   await db.collection("notes").deleteMany({ userId: users[0].id, subjectId: subject.id });
-  assert.equal((await a.request("/api/subjects/" + subject.id, "DELETE")).status, 200);
   assert.equal((await a.request("/api/subjects/" + subject.id)).status, 404);
   assert.equal((await a.request("/api/subjects/" + subject.id, "DELETE")).status, 404);
   assert.equal((await (await b.request("/api/subjects")).json()).subjects.length, 1);
-  console.log("Passed: persisted subject CRUD, owner isolation, safe DTOs, duplicate-name races, validation, request limits, CSRF origin checks, forged sessions, child guard, and deletion.");
+  console.log("Passed: persisted subject CRUD, owner isolation, safe DTOs, duplicate-name races, validation, request limits, CSRF origin checks, forged sessions, recursive note cleanup, and deletion.");
 } finally {
   if (connected) {
     const db = client.db(databaseName);

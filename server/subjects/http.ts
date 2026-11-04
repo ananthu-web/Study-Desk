@@ -20,7 +20,7 @@ export async function subjectRequest(request: Request, action: (userId: string) 
     return subjectResponse({ code: "SUBJECTS_UNAVAILABLE", message: "Your subjects are temporarily unavailable. Please try again." }, 503);
   }
 }
-export async function subjectJson(request: Request): Promise<unknown> {
+export async function subjectJson(request: Request, limit = 8192): Promise<unknown> {
   if (request.headers.get("content-type")?.split(";")[0].trim() !== "application/json") throw new SubjectError(415, "JSON_REQUIRED", "Send subject details as JSON.");
   if (!request.body) throw new SubjectError(400, "INVALID_JSON", "Please check your subject details.");
   const reader = request.body.getReader();
@@ -31,7 +31,7 @@ export async function subjectJson(request: Request): Promise<unknown> {
       const { done, value } = await reader.read();
       if (done) break;
       size += value.byteLength;
-      if (size > 8192) { await reader.cancel(); throw new SubjectError(413, "BODY_TOO_LARGE", "These subject details are too long."); }
+      if (size > limit) { await reader.cancel(); throw new SubjectError(413, "BODY_TOO_LARGE", "These subject details are too long."); }
       chunks.push(value);
     }
   } finally { reader.releaseLock(); }

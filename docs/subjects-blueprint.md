@@ -1,66 +1,60 @@
-# Subjects — blueprint and frontend brief
+# Subjects — complete section blueprint
 
-Stage 3 · 4 November 2026
+Updated 4 November 2026. Implementation is complete for the scope below, tested locally with an isolated database and real private B2 storage. Production environment setup and physical iPhone verification remain deployment checks.
 
 ## Purpose and journey
 
-Give each subject a private home for its folders, PDFs, resource links, and notes. Open Subjects → choose or add a subject → enter its workspace → find a chapter/material → study or write. A subject must remain useful even with no folders. Keep the accepted StudyDesk palette, shared book, serif headings, capsule actions, readable body text, safe areas, and mobile bottom navigation. No ambient animation in this workspace.
+Subjects → subject workspace → chapter folder → PDF or class link, with Quick notes beside Materials. Keep the accepted warm stone/charcoal, green subject panel, shared book logo, serif headings, readable body text, capsule controls, and mobile bottom navigation. No ambient motion in study workspaces. Materials/Notes changes preserve scroll; opening another subject resets the workspace to its heading.
 
-## Delivery order and current boundary
+## Implemented features
 
-1. Blueprint and Subjects frontend: shelf, Add/Edit/Delete subject forms, colour/goal choices, first-use/sample states, subject workspace, and material/note layout previews.
-2. MongoDB-backed subject CRUD with per-user ownership checks and real loading/errors.
-3. Nested folder operations and navigation.
-4. Private Backblaze B2 uploads and resource links.
-5. PDF viewing and resource rename/move/delete.
-6. Quick notes with reliable save feedback; connect Focus when its timer exists.
+- Subjects: authenticated create/read/update/delete, six colours, descriptions, optional daily goals, unique names per student. Home shows saved subjects. Samples remain separate in-memory examples.
+- Folders: create, rename, move within the subject, browse nested folders with breadcrumbs, and recursively delete with confirmation. Five levels maximum; 100 folders per subject; case-insensitive sibling names; no cycles or cross-subject parents.
+- Materials: private PDFs and HTTPS resource/class links. Create links, rename/move resources, edit link addresses, delete individual resources, and open links safely in a new tab. Up to 200 materials per subject. Resources may live directly at the subject root.
+- PDFs: choose/upload, actual progress and cancellation, completion validation, unfinished-upload recovery/removal, canvas reader with page navigation and zoom, download original, rename/move/delete. Downloads use the latest displayed title. Private signed access is checked before every URL is issued.
+- Notes: one plain-text quick note per subject; 20,000 characters; automatic saving after 900ms of inactivity; visible saving/saved/unsaved/error states; retry; version-based conflict rejection; copy draft and reload saved note actions. Session-local drafts recover interrupted editing where browser storage is available. Warn before leaving with unsaved changes. Browser history/navigation cannot guarantee a save while offline; recovered drafts are the fallback.
 
-Steps 1 and 2 are implemented. On authenticated routes, Your subjects is loaded from MongoDB and Add/Edit/Delete changes persist only after a successful API response. New accounts start empty. The separate Sample subjects shelf and all development preview subjects remain in-memory examples and reset when leaving/reloading; they never write to MongoDB. Folder/material/note contents remain illustrative or empty. B2 uploads, actual folder CRUD, PDF viewing, and note saving are still unimplemented.
+## Screens and interactions
 
-## Screen blueprint
+Shelf: header/action, own/sample switch, book-like cards, optional daily intention, Add/Edit form, empty/error/retry states. Subject form: name required 1–60 characters after trimming/collapsing whitespace; description up to 160; palette radio group; optional 15–480 whole minutes. Subject goal is separate from the dashboard's daily goal.
 
-Subjects shelf: eyebrow and expressive heading, short description, count, Add subject action, Your subjects / Sample subjects switch, then book-like cards. Each card shows the subject name, short description, selected colour, optional daily goal, and explicit sample/preview status. Put edit controls separately from the card-opening button: never nest interactive elements. First-use state offers Add subject and Browse examples.
+Workspace: subject identity, edit action, daily intention, Focus link (timer functionality belongs to Stage 4), Materials/Quick notes tabs. Materials has breadcrumbs, New folder, Upload PDF, Add link, capacity display, folder cards and resource rows. Rename/move uses a destination selector. Destructive dialogs explicitly describe recursive deletion. Native dialogs trap focus, support Escape and close controls, and keep their close button visible while long forms scroll. Pending destructive requests cannot be accidentally dismissed.
 
-Subject workspace: Back to subjects, subject identity on a green panel, description, optional goal, Edit subject, and a link to the Focus landing page. Do not claim that a timer starts or that the subject is preselected yet. Materials and Notes tabs have proper selected states and arrow-key navigation. Sample materials include chapter folders and titled document/link rows; clicking a row explains that it is a fictional resource, without opening arbitrary external URLs. New subjects show clear empty states. Notes use a read-only illustrative sample until note editing is built.
+Subject/tab/folder URL state uses query parameters and supports Back/Forward. Saved IDs survive reload; missing/foreign IDs show unavailable states. Sample and development preview subjects remain temporary, clearly labelled, and never write to account storage. Development preview URLs are not exposed in production.
 
-URL state: `?subject=<id>&tab=materials|notes&folder=<id>` supports browser Back/Forward and sample deep links. Saved subject IDs survive refresh. New preview subject IDs exist only until the section unmounts; a stale URL must show a clear unavailable state and a way back. Opening a different subject scrolls the internal main area to the top and focuses the workspace heading without opening a keyboard. Switching Materials/Quick notes or browsing folders within the same subject preserves scroll and control focus. Switching shelves preserves each shelf's in-memory edits and clears detail navigation.
+## Data, ownership, and concurrency
 
-## Subject form and rules
+MongoDB driver, existing Better Auth sessions. Every read/write derives userId from the verified session and scopes subjects, folders, notes and resources to that owner. Client-provided userId and unknown fields are rejected. Mutations require a configured trusted Origin; JSON bodies are bounded. Public DTOs omit storage keys, owner IDs, internal flags and credentials. Auth failures return 401; inaccessible/missing records return the same 404. Responses are no-store.
 
-- Name: required, trimmed, collapse repeated whitespace; 1–60 characters. Case-insensitive duplicates rejected within the current shelf; backend will enforce per-user uniqueness.
-- Description: optional, maximum 160 characters, plain text.
-- Colour: six restrained options (sage, sand, clay, slate, olive, rose); selectable radio group with both readable name and selected indicator. Colour is supplementary, never the only identifier.
-- Subject daily goal: optional whole number, 15–480 minutes. Independent of the dashboard's overall daily goal: do not silently sum, change, or double-count goals. Leave blank for no goal.
-- Saved subjects use Add subject / Save changes with a real pending state and disabled fields/actions during the request. Sample subjects retain Add/Update preview. Inline validation focuses the first invalid input. API errors keep the dialog and entered values available; no success is shown until the request succeeds.
-- Native modal dialog traps focus, closes on Escape/close/outside click, and returns focus to its trigger where possible. On deleting the selected subject, focus returns to the shelf heading.
-- Delete uses an explicit confirmation naming the subject. During this frontend step only the local preview entry is removed. Later, real deletion must explain nested folder/file/note consequences and clean up stored objects; never claim a completed remote deletion before cleanup is confirmed.
+Subjects have unique `{userId, normalisedName}` plus owner/time indexes. Folders use unique `{userId, subjectId, parentId, normalisedName}`. Notes are unique per user/subject. Folder/resource/note transactions update the parent subject to serialize workspace changes, preventing creation into deleting folders and folder move cycles. Subject name edits are last-write-wins; note edits use version comparison and never silently overwrite a newer saved version.
 
-## Data and server contract
+Delete operations mark content as deleting, remove B2 versions before releasing quota/removing metadata, and preserve retry state if storage cleanup fails. Folder deletion removes its descendants and materials; subject deletion also removes its note. Notes are unaffected by deleting a folder. Daily maintenance retries interrupted cleanup. Long/large deletions may need retry if a hosting request times out; already completed cleanup is preserved.
 
-Subject: id, userId, name, normalisedName, description, colour enum, optional dailyGoalMinutes, createdAt, updatedAt. Add a unique `{userId, normalisedName}` index. Folder: id, userId, subjectId, parentId|null, name, timestamps. Resource: id, userId, subjectId, folderId|null, title, type, storageKey or URL, size/content type, upload status, timestamps. Note: id, userId, subjectId, title/body, version, updatedAt.
+## File storage and limits
 
-Subjects API: authenticated list/create/update/delete. Take userId from the verified session, never the browser. Apply ownership checks to subject and every referenced folder/resource. Enforce validation on the server too, handle concurrent duplicate names, and return non-leaking missing/unauthorised results. Use existing MongoDB driver; do not add Mongoose solely for this feature.
+Private Backblaze B2 via S3. 20 MB/PDF; 100 MB total PDFs per student, including reservations for unfinished uploads. Reserve quota transactionally before issuing a scoped upload URL; at most five unfinished uploads per user. Browser sends files directly to B2, avoiding Vercel request-size limits. PUT signatures include the exact content length/type and expire after two minutes. Reservations expire after ten minutes to allow slow in-flight uploads. Completion verifies actual object size/type and a PDF header, then pins its B2 version. This is file-format validation, not malware scanning.
 
-Proposed folder policy: maximum five folder levels, sibling names unique ignoring case, no folder cycles, no cross-subject moves initially. Confirm final policy when implementing folders.
+Read/download URLs are issued only after ownership checks and expire after five minutes. The PDF reader uses locally bundled PDF.js worker/fonts/CMaps/WASM. Canvas rendering does not provide selectable text; download the original for native accessibility tools. Damaged or password-protected PDFs may require the original/native reader. Physical Safari behaviour remains to be checked.
 
-Proposed uploads policy: PDF only initially, maximum 20MB/file, initial 100MB/user quota with configurable global budget. These are design proposals, not enforced limits yet. Validate file contents and size server-side, issue short-lived scoped uploads/downloads only after ownership checks, and keep B2 private. Store object keys, never permanent public file URLs. Validate links as HTTPS (optionally HTTP where explicitly permitted); reject script/data URLs. Plan object cleanup, abandoned uploads, quota reservations, and B2 version lifecycle before enabling uploads. Shared B2 free storage is per account, not per student.
+Cleanup deletes actual B2 versions, not just hide markers. A signed upload URL can be reused briefly, so deferred cleanup removes abandoned/repeated versions after expiry while retaining the validated version of a live PDF. A daily protected Vercel job handles users who never return; workspace visits also sweep eligible work. Existing unrelated bucket CORS rules are preserved and bucket privacy is unchanged.
 
-Notes will use debounced saves with visible saving/saved/failed states, retry, conflict detection, and navigation protection for unsaved changes. No editable notes without a reliable persistence path.
+## Routes
 
-## States and acceptance
+`/api/subjects` and `/api/subjects/[id]`: subject CRUD.
+`/[id]/workspace`: current folder contents and the complete folder tree/capacity.
+`/[id]/folders` and `/[id]/folders/[item]`: folder create/update/delete.
+`/[id]/resources` and `.../resources/[item]`: start upload/create link, update, delete.
+`.../resources/[item]/complete`: verify and finalize PDF.
+`.../resources/[item]/file`: obtain a short-lived read/download URL.
+`/[id]/note`: read/versioned save.
+`/api/maintenance/storage`: daily cleanup, restricted by a strong CRON_SECRET bearer token.
 
-Cover empty/populated shelves, no-goal subjects, long names, duplicate/invalid form values, create/edit/delete/cancel, stale subject/folder URLs, materials/notes tabs, sample folder navigation, explanatory resource dialog, light/dark, keyboard, small phones, and scroll/safe-area clearance. Later cover actual request loading/failure/retry and upload progress/cancellation.
+## Deployment
 
-Acceptance: own subjects persist through authenticated APIs; samples remain explicitly separate; no data from another account is returned or modified. Authenticated routes remain protected. Production never exposes the unauthenticated development preview. Physical Safari/iPhone review and backend integration remain separate checks.
+See [storage setup](storage-setup.md). Set all five B2 settings and CRON_SECRET privately in Vercel Production, then redeploy. The source includes the daily cron schedule; requests are rejected if its secret is missing or invalid. A generated local cleanup secret is in ignored `.env.local`. Never expose storage credentials through NEXT_PUBLIC variables. Use a fresh bucket-scoped B2 key before public launch because the earlier key was disclosed in chat.
 
-## Verification completed
+## Verification
 
-Production build and TypeScript passed. Chrome checks covered 320×640, 390×844, 430×932, 768×1024, and 1440×1000: subject shelf/workspace and dialogs remained within viewport bounds without horizontal overflow. Confirmed the close control stays visible when a long form scrolls. Reviewed mobile light/dark screenshots and the subject workspace. Browser checks passed required-name and duplicate-name errors, whitespace normalisation, invalid/optional goals, colour selection, add/edit/delete/cancel, tabs and keyboard arrows, history, sample folders/resource dialogs, stale subject/folder URLs, and unauthenticated redirects, with no browser runtime errors. This is frontend verification, not proof of persistence, B2 access, or physical iPhone compatibility.
+Build and TypeScript passed. `npm run test:subjects` verifies subject CRUD/ownership; `npm run test:materials` refuses remote DB/app targets, uses disposable local accounts, and creates/removes exact tiny test keys in B2. Integration checks passed nested depth/cycle/duplicate constraints, cross-user access, HTTPS links, quota reservations/releases, PDF signature/size validation, private upload/read/download, version pinning and protected deferred cleanup, rename/move, note persistence/conflicts, recursive cleanup, and deletion.
 
-## Implemented persistence and current limits
-
-`server/subjects/service.ts` owns validated MongoDB operations. `subjects` uses unique `{userId, normalisedName}` and `{userId, createdAt}` indexes. List/single GET, POST, PATCH, DELETE are under `/api/subjects`. They verify database-backed sessions, filter every query by the session's user ID, reject extra fields, and return explicit DTOs without owner/internal fields. Mutations require a configured trusted Origin. JSON bodies are bounded to 8KB. Names use collapsed whitespace and locale-independent lowercase for the unique key. Duplicate races return 409; unauthorised/missing IDs both return 404; transient server errors are generic 503. Responses are no-store.
-
-The UI loads with an AbortController, shows a genuine loading/error/retry state, redirects expired sessions to welcome, prevents duplicate submissions, and keeps entered form values after request failure. Dashboard Home reads the same endpoint and shows up to three saved subjects. Editing is last-write-wins; no collaborative versioning is claimed. Deletion is limited to empty subjects: if a future folder/resource/note exists, it returns 409 rather than orphaning content. Real file cleanup will be designed with folder/storage integration.
-
-`npm run test:subjects` refuses remote app/database targets and uses disposable accounts in `studydesk_auth_test_subjects`. API/database tests passed persistence, cross-user list/read/update/delete rejection, injected owner fields, safe DTOs, concurrent duplicate names, input/body validation, origin checks, forged sessions, child guards, and deletion. Phone Chrome checks against the isolated server passed create → reload → edit → reload → dashboard summary → failed delete → successful delete → reload, remote-duplicate errors preserving input, and list-error retry. Test accounts/subjects were removed. No Atlas student data was created or modified during tests. Production build/TypeScript passed. A read-only deployed auth endpoint recheck returned HTTP 200; this does not substitute for a physical iPhone account flow after deployment.
+Phone Chrome checks passed real browser B2 upload, PDF page navigation/zoom, resource moves, note autosave/refresh, conflicts, failed-save retry, and full subject deletion. Layouts were checked at 320×640, 390×844, and 1440×1000; light-mode material and PDF screenshots were inspected. Physical iPhone/PWA testing and production configuration remain distinct from local browser verification. No real Atlas student records were created or deleted during tests.

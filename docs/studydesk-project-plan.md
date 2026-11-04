@@ -183,24 +183,15 @@ Design first-use and populated states. Label fixture data during development. Co
 
 **Goal:** Organise and retrieve everything needed for a subject.
 
-Build in order:
+Implemented: saved subject CRUD; nested folders with rename/move/recursive deletion; private B2 PDF upload/progress/cancel; PDF reader with pages/zoom/download; HTTPS links; resource rename/move/delete; automatically saved subject notes with draft recovery and conflict handling; private file access and cleanup.
 
-1. Create, edit, and delete subjects.
-2. Subject detail workspace.
-3. Nested folders and folder navigation.
-4. File uploads and resource links.
-5. View, rename, move, and delete resources.
-6. Quick notes within subjects.
+Use the accepted mobile-first desk styling, shared book mark, readable controls, and quiet study surfaces. Preserve scroll for Materials/Notes and folder navigation. Samples remain clearly separate from saved data.
 
-Workspace: subject identity, materials, folders, notes, study action, and later study progress.
+Limits: five folder levels, 100 folders and 200 materials per subject, 20 MB/PDF, 100 MB/user, 20,000 note characters. Verify ownership and relationships on every operation. Reserve storage transactionally; validate uploads before showing them as ready. Remove actual B2 versions and retry incomplete cleanup. The daily maintenance route is protected by CRON_SECRET.
 
-Define folder depth, duplicate names, allowed file types, maximum upload size, per-user storage limits, deletion behaviour, private file access, and storage cleanup. Define note-saving and failure recovery behaviour.
+**Implementation status:** Complete for this scope and verified with isolated database/API tests plus real browser B2 uploads and PDF reading. No real Atlas student data was touched by tests. Production B2/CRON environment variables and physical iPhone verification remain deployment steps; see [Subjects blueprint](subjects-blueprint.md) and [storage setup](storage-setup.md).
 
-Use a storage interface to support local development and Backblaze B2 integration.
-
-**Frontend status (4 November 2026):** The Subjects shelf, temporary Add/Edit/Delete flows, six colour choices, optional daily goal, individual workspace, Materials/Quick notes tabs, sample folder navigation, and explanatory resource previews are implemented. New accounts start with an empty shelf; examples are separate and clearly labelled. Query URLs support subject/tab/folder navigation and stale-preview recovery. Own subjects now persist through authenticated MongoDB APIs; the separate sample shelf remains temporary. B2 uploads, folder CRUD, real resource viewing, and note writing are not connected yet. See [Subjects blueprint](subjects-blueprint.md).
-
-**Acceptance:** Students can securely manage subjects, folders, files, links, and notes. Every operation, including file access, checks ownership.
+**Acceptance:** Students can manage subjects, folders, PDFs, links, and quick notes with privacy, clear feedback, and recoverable failures. The Focus link opens its landing page; timer integration is Stage 4.
 
 ## 8. Stage 4 — Timer, goals, and Focus Mode
 
@@ -397,7 +388,7 @@ Judge the result by clarity, character, consistency, accessibility, reliability,
 
 ## 15. Next action
 
-Review Stage 2's dashboard frontend on a physical iPhone and confirm its direction before integrating study data. The local design preview is `/preview/dashboard`; signed-in users use `/dashboard` and can switch between their empty desk and an explicitly labelled sample desk. Subject persistence is implemented and verified against an isolated database. Next feature work is nested folder CRUD, followed by private B2 uploads and resource viewing. Physical iPhone review of the deployed saved-subject flow remains. Stage 1 still needs an email provider for recovery/verification and deployed authentication checks before public launch.
+Review Stage 2's dashboard frontend on a physical iPhone and confirm its direction before integrating study data. The local design preview is `/preview/dashboard`; signed-in users use `/dashboard` and can switch between their empty desk and an explicitly labelled sample desk. The complete Subjects implementation is locally verified. Set B2 and CRON environment variables in Vercel, deploy, and review the full flow on a physical iPhone. The next feature blueprint is Stage 4: Focus, timer, and goals. Stage 1 still needs an email provider for recovery/verification and deployed authentication checks before public launch.
 
 Guest entry behaviour: new visitors, logged-out users, and users with expired or invalid sessions land on the welcome page (`/`), including when opening a protected dashboard URL. Successful logout returns to welcome. The installed app starts at `/`. Valid signed-in visitors are redirected from entry pages to `/dashboard`; explicit Sign in and Get started actions still open their respective forms.
 
@@ -424,3 +415,5 @@ Backblaze setup: bucket reported created. Environment placeholders are prepared 
 Authentication feedback: show a brief, dismissible, theme-aware success notice in the verified dashboard shell after successful signup or login. Consume a matching, short-lived one-use UI receipt; never show confirmation from a URL flag or delay entry for a message. Refresh does not replay it.
 
 Subject persistence update: real accounts can list, add, edit, and delete empty subjects with server validation and ownership checks; Home reads saved subjects. Keep sample material/note previews distinct from account data. Deleting subjects with content remains blocked until reliable file cleanup is available. API/database and phone-browser tests plus production build passed; see Subjects blueprint for evidence and limits.
+
+Subjects completion supersedes earlier placeholder/persistence-only notes: folders, materials, PDF reading, saved notes, and recursive cleanup are implemented. Browser upload CORS was configured on the existing private B2 bucket. Production still needs its private storage/cleanup environment settings; see storage setup for exact names.

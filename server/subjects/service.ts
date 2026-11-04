@@ -54,17 +54,12 @@ export async function createSubject(userId: string, values: Values) {
 }
 export async function updateSubject(userId: string, id: string, values: Values) {
   try {
-    const record = await (await collection()).findOneAndUpdate({ _id: objectId(id), userId }, { $set: { ...values, normalisedName: values.name.toLowerCase(), updatedAt: new Date() } }, { returnDocument: "after" });
+    const record = await (await collection()).findOneAndUpdate({ _id: objectId(id), userId, deleting: { $ne: true } }, { $set: { ...values, normalisedName: values.name.toLowerCase(), updatedAt: new Date() } }, { returnDocument: "after" });
     if (!record) throw missing();
     return dto(record);
   } catch (error) { return duplicate(error); }
 }
 export async function deleteSubject(userId: string, id: string) {
-  await getSubject(userId, id);
-  // Until material cleanup is implemented, refuse to orphan any future child records.
-  const { db } = await getDatabase();
-  const children = await Promise.all(["folders", "resources", "notes"].map(name => db.collection(name).findOne({ userId, subjectId: id }, { projection: { _id: 1 } })));
-  if (children.some(Boolean)) throw new SubjectError(409, "SUBJECT_HAS_CONTENT", "Remove this subject’s materials and notes before deleting it.");
-  const result = await (await collection()).deleteOne({ _id: objectId(id), userId });
-  if (!result.deletedCount) throw missing();
+  const { removeSubjectTree } = await import("./workspace");
+  await removeSubjectTree(userId, id);
 }

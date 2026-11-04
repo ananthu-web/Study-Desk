@@ -6,3 +6,7 @@ out/
 .env*
 !.env.example
 .DS_Store
+
+/public/pdf.worker.min.mjs
+
+/public/pdfjs/
