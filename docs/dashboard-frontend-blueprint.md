@@ -16,7 +16,7 @@ Desktop: 224px sidebar, roomy editorial content column, horizontally composed st
 
 ## States and interactions
 
-Real accounts default to a first-use empty desk. Sample desk explicitly shows fixture subjects, 95/120 minutes of progress, plans, and deadlines. The mode selector never changes saved student data. In sample mode, goal editing and completing agenda items are temporary local interactions; labels explain this. Subject cards open a native accessible dialog with sample topic details. Escape, close button, and backdrop dismiss dialogs; restore focus on close. Start studying leads to Focus; Add subject leads to Subjects, where creation is honestly marked unavailable until integration. No fake timer or file uploads.
+Real accounts default to a first-use empty desk. Sample desk explicitly shows fixture subjects, 95/120 minutes of progress, plans, and deadlines. The mode selector never changes saved student data. In sample mode, goal editing and completing agenda items are temporary local interactions; labels explain this. Subject cards open a native accessible dialog with sample topic details. Escape, close button, and backdrop dismiss dialogs; restore focus on close. Start studying leads to Focus; Add subject leads to Subjects, whose forms now support explicitly labelled temporary preview subjects until persistence is integrated. No fake timer or file uploads.
 
 Navigation highlights the current route and uses aria-current. Mobile has Home, Subjects, Focus, Planner, Calendar; Settings remains accessible in the header. Desktop includes Settings. Settings offers persistent Light/Dark/System choice and actual logout. System preference follows OS changes when selected.
 
@@ -33,3 +33,5 @@ Build/type checks must pass. Verify phone widths 320/390/430px, tablet and deskt
 ## Verification completed
 
 Production build and TypeScript checks passed. Automated Chrome checks covered 320×640, 390×844, 430×932, 768×1024, and 1440×1000 with no horizontal overflow. Inspected phone light/dark and desktop screenshots. Dialog opening/Escape dismissal, temporary goal editing, plan completion, first-use/sample switching, all mobile tabs, active states, persistent theme selection, live OS theme changes, unknown-section handling, and guest redirects passed with no browser runtime errors. The development-only Next.js badge was hidden during interaction checks because it overlapped the Home tab; it is absent in production. Production checks confirmed both dashboard preview paths render not-found content and protected Settings redirects guests to welcome. Physical Safari/iPhone and a fresh authenticated production account flow remain to be checked. No study persistence or real timer is claimed.
+
+Subjects frontend update: see [Subjects blueprint](subjects-blueprint.md). The shared Subjects landing placeholder has been replaced by the shelf/workspace frontend, with no change to authentication or study-data persistence.

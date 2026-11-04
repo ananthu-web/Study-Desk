@@ -88,8 +88,8 @@ Document dependencies. Dashboard summaries become fully functional when their un
 - Tailwind CSS with reusable design tokens.
 - MongoDB Atlas.
 - Better Auth: email and password.
-- Local file storage during development; Cloudflare R2 for production.
-- Hosting target: Vercel, MongoDB Atlas, and Cloudflare R2. Verify current service limits and deployment compatibility before committing to production architecture. Free hosting is a target rather than a guarantee.
+- File storage target: private Backblaze B2 using its S3-compatible API; local storage may be used during development.
+- Hosting target: Vercel, MongoDB Atlas, and Backblaze B2. Verify current service limits and deployment compatibility before committing to production architecture. Free hosting is a target rather than a guarantee.
 
 Read the relevant installed guides in `node_modules/next/dist/docs/` before writing Next.js implementation code, as required by the project instructions.
 
@@ -196,7 +196,9 @@ Workspace: subject identity, materials, folders, notes, study action, and later 
 
 Define folder depth, duplicate names, allowed file types, maximum upload size, per-user storage limits, deletion behaviour, private file access, and storage cleanup. Define note-saving and failure recovery behaviour.
 
-Use a storage interface to support local development and later R2 integration.
+Use a storage interface to support local development and Backblaze B2 integration.
+
+**Frontend status (4 November 2026):** The Subjects shelf, temporary Add/Edit/Delete flows, six colour choices, optional daily goal, individual workspace, Materials/Quick notes tabs, sample folder navigation, and explanatory resource previews are implemented. New accounts start with an empty shelf; examples are separate and clearly labelled. Query URLs support subject/tab/folder navigation and stale-preview recovery. No subject persistence, B2 uploads, real resource viewing, or note writing is connected yet. See [Subjects blueprint](subjects-blueprint.md).
 
 **Acceptance:** Students can securely manage subjects, folders, files, links, and notes. Every operation, including file access, checks ownership.
 
@@ -395,7 +397,7 @@ Judge the result by clarity, character, consistency, accessibility, reliability,
 
 ## 15. Next action
 
-Review Stage 2's dashboard frontend on a physical iPhone and confirm its direction before integrating study data. The local design preview is `/preview/dashboard`; signed-in users use `/dashboard` and can switch between their empty desk and an explicitly labelled sample desk. Next feature work is the Subjects blueprint and implementation. Stage 1 still needs an email provider for recovery/verification and deployed authentication checks before public launch.
+Review Stage 2's dashboard frontend on a physical iPhone and confirm its direction before integrating study data. The local design preview is `/preview/dashboard`; signed-in users use `/dashboard` and can switch between their empty desk and an explicitly labelled sample desk. Next feature work is reviewing the Subjects frontend, then integrating authenticated MongoDB subject operations. Folder CRUD and B2 uploads follow afterward. Stage 1 still needs an email provider for recovery/verification and deployed authentication checks before public launch.
 
 Guest entry behaviour: new visitors, logged-out users, and users with expired or invalid sessions land on the welcome page (`/`), including when opening a protected dashboard URL. Successful logout returns to welcome. The installed app starts at `/`. Valid signed-in visitors are redirected from entry pages to `/dashboard`; explicit Sign in and Get started actions still open their respective forms.
 
@@ -416,3 +418,5 @@ Notebook realism refinement: replace the flat scale flip with a flexible sheet r
 Notebook layer order: paint the tabletop pencil and brown notebook before the open notebook and animated paper. The raised sheet must pass above those tabletop objects; use SVG document order rather than CSS z-index. Keep the lamp and foreground objects in their existing later layers.
 
 Lamp/page sequence: begin the first notebook page turn at 2.4 seconds, just after the lamp finishes lighting the desk. Turn over 3.8 seconds and repeat every 10.5 seconds with a calm rest between sheets. Continue while visible, respecting the existing focus, background-tab, and reduced-motion pauses.
+
+Backblaze setup: bucket reported created. Environment placeholders are prepared for `B2_KEY_ID`, `B2_APPLICATION_KEY`, `B2_BUCKET_NAME`, `B2_ENDPOINT`, and `B2_REGION`. Connection and uploads are not implemented or verified. Replace the disclosed application key with a fresh key restricted to the private StudyDesk bucket; do not use account-wide key/bucket administration permissions. Keep actual credentials only in ignored local and deployment environment settings.

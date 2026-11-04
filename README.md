@@ -52,3 +52,5 @@ The dashboard frontend is implemented; subjects, tracking, plans, and events rem
 See [the project plan](docs/studydesk-project-plan.md), [login frontend blueprint](docs/login-frontend-blueprint.md), and [authentication backend blueprint](docs/authentication-backend-blueprint.md).
 
 See [the dashboard frontend blueprint](docs/dashboard-frontend-blueprint.md) for Stage 2 interaction and integration boundaries.
+
+Subjects frontend: `/dashboard/subjects` now has a shelf, temporary Add/Edit/Delete forms, colour and goal choices, subject workspaces, sample folders, and read-only note/resource previews. Review locally at `/preview/dashboard/subjects`. All subject changes reset when the section unmounts or reloads; MongoDB persistence and private B2 uploads are next. See [Subjects blueprint](docs/subjects-blueprint.md).
