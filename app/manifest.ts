@@ -5,8 +5,8 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "StudyDesk",
     short_name: "StudyDesk",
     description: "Your subjects, plans, and focus, together at one desk.",
-    // Signed-in students land on their dashboard; others are redirected to login by proxy.ts.
-    start_url: "/dashboard",
+    // The entry layout sends signed-in students to their dashboard and welcomes everyone else.
+    start_url: "/",
     scope: "/",
     display: "standalone",
     orientation: "portrait",

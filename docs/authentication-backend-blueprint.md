@@ -66,3 +66,5 @@ An isolated local replica set and a second Next.js server were used, without mod
 - Verify deployment HTTPS origin, cookie settings, trusted proxy/IP behaviour, and live account flows before public launch.
 
 References: [Better Auth installation](https://better-auth.com/docs/installation), [MongoDB adapter](https://better-auth.com/docs/adapters/mongo), [Next.js integration](https://better-auth.com/docs/integrations/next), and [rate limits](https://better-auth.com/docs/concepts/rate-limit).
+
+Guest entry behaviour: new visitors, logged-out users, and users with expired or invalid sessions land on the welcome page (`/`), including when opening a protected dashboard URL. Successful logout returns to welcome. The installed app starts at `/`. Valid signed-in visitors are redirected from entry pages to `/dashboard`; explicit Sign in and Get started actions still open their respective forms.

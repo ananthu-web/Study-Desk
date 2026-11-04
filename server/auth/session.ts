@@ -13,6 +13,6 @@ export async function readSession(requestHeaders: Headers) {
 
 export async function requireSession() {
   const session = await readSession(await headers());
-  if (!session) redirect("/login");
+  if (!session) redirect("/");
   return session;
 }

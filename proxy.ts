@@ -3,7 +3,7 @@ import { getSessionCookie } from "better-auth/cookies";
 
 /** Optimistic navigation only. Protected pages and APIs verify the database session separately. */
 export function proxy(request: NextRequest) {
-  if (!getSessionCookie(request)) return NextResponse.redirect(new URL("/login", request.url));
+  if (!getSessionCookie(request)) return NextResponse.redirect(new URL("/", request.url));
   return NextResponse.next();
 }
 

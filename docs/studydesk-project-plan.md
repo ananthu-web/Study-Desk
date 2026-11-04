@@ -394,3 +394,5 @@ Judge the result by clarity, character, consistency, accessibility, reliability,
 ## 15. Next action
 
 The student can now create and sign into an account using the verified Atlas configuration. Choose an email provider to finish password recovery and email verification. Basic authentication has passed isolated database/API and mobile browser checks; Stage 1 remains incomplete until the remaining account flows and deployment settings are verified.
+
+Guest entry behaviour: new visitors, logged-out users, and users with expired or invalid sessions land on the welcome page (`/`), including when opening a protected dashboard URL. Successful logout returns to welcome. The installed app starts at `/`. Valid signed-in visitors are redirected from entry pages to `/dashboard`; explicit Sign in and Get started actions still open their respective forms.

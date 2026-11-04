@@ -47,7 +47,7 @@ try {
   assert.equal((await guest.request("/api/me")).status, 401);
   const guestPage = await guest.request("/dashboard");
   assert.ok([302, 307].includes(guestPage.status));
-  assert.equal(new URL(guestPage.headers.get("location"), base).pathname, "/login");
+  assert.equal(new URL(guestPage.headers.get("location"), base).pathname, "/");
 
   const signUp = await a.request("/api/auth/sign-up/email", { name: "  Student A  ", email: emailA, password });
   assert.equal(signUp.status, 200, "Registration should succeed");
@@ -81,7 +81,7 @@ try {
   assert.equal((await guest.request("/api/me", undefined, { Cookie: "better-auth.session_token=forged" })).status, 401);
   const forgedPage = await guest.request("/dashboard", undefined, { Cookie: "better-auth.session_token=forged" });
   assert.ok([302, 307].includes(forgedPage.status));
-  assert.equal(new URL(forgedPage.headers.get("location"), base).pathname, "/login");
+  assert.equal(new URL(forgedPage.headers.get("location"), base).pathname, "/");
 
   assert.equal((await a.request("/api/auth/sign-in/email", { email: emailA, password: "wrong-password" })).status, 401);
   assert.equal((await a.request("/api/auth/sign-in/email", { email: emailA, password })).status, 200);
