@@ -44,6 +44,17 @@ export function DeskIllustration({ idPrefix = "desk" }: { idPrefix?: string } = 
       <path d="m102 210 261 145 151-86" stroke="#E3D0AD" strokeOpacity=".55" />
       </g>
 
+      {/* Tabletop tools sit below the open notebook and its raised paper in SVG paint order. */}
+      {/* Pencil and a small terracotta notebook. */}
+      <g className="desk-tools">
+      <path d="m366 293 45-27" stroke="#3C594A" strokeWidth="4" strokeLinecap="round" />
+      <path d="m411 266 7-4-4 7" fill="#E0CB9D" />
+      <path d="m147 195 44-26 35 19-44 26Z" fill="#A75F46" />
+      <path d="m147 195 35 19v5l-35-20Z" fill="#874B37" />
+      <path d="m182 214 44-26v4l-44 27Z" fill="#E5D8BD" />
+      <path d="m156 190 35 19" stroke="#D69A76" />
+      </g>
+
       {/* Open notebook with stitch binding and handwritten lines. */}
       <g className="desk-notebook">
       <path d="m170 241 83-48 139 77-84 49Z" fill="#705C44" opacity=".18" transform="translate(3 6)" />
@@ -57,16 +68,6 @@ export function DeskIllustration({ idPrefix = "desk" }: { idPrefix?: string } = 
       <path d="m266 266 32-19m-21 25 38-22m-27 28 38-22m-27 28 38-22" stroke="#A6AE96" strokeOpacity=".75" strokeWidth="1.4" strokeLinecap="round" />
       <path d="m274 300 10 6 16-10-10-6Z" fill="#B96F51" />
       <NotebookPage />
-      </g>
-
-      {/* Pencil and a small terracotta notebook. */}
-      <g className="desk-tools">
-      <path d="m366 293 45-27" stroke="#3C594A" strokeWidth="4" strokeLinecap="round" />
-      <path d="m411 266 7-4-4 7" fill="#E0CB9D" />
-      <path d="m147 195 44-26 35 19-44 26Z" fill="#A75F46" />
-      <path d="m147 195 35 19v5l-35-20Z" fill="#874B37" />
-      <path d="m182 214 44-26v4l-44 27Z" fill="#E5D8BD" />
-      <path d="m156 190 35 19" stroke="#D69A76" />
       </g>
 
       {/* Ceramic mug. */}
