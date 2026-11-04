@@ -23,9 +23,11 @@ export function NotebookPage() {
     let painted = 0;
 
     function draw(time: number) {
-      const phase = (time % 10500) / 10500;
-      // A long resting interval, then lift, cross the spine, and gently settle.
-      const progress = Math.max(0, Math.min(1, (phase - .55) / .36));
+      // The lamp finishes switching on at about 2.2s; begin the first turn just afterward.
+      if (time < 2400) { element!.setAttribute("opacity", "0"); return; }
+      const phase = (time - 2400) % 10500;
+      // Lift and settle over 3.8s, then rest before the next sheet turns.
+      const progress = Math.min(1, phase / 3800);
       if (progress === 0 || progress === 1) { element!.setAttribute("opacity", "0"); return; }
       const angle = Math.PI * smooth(progress);
       const lift = Math.sin(angle);
