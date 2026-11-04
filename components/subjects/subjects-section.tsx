@@ -29,16 +29,14 @@ export function SubjectsSection({ base = "/dashboard", preview = false }: { base
   const modal = useRef<HTMLDialogElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const addButton = useRef<HTMLButtonElement>(null);
-  const previousQuery = useRef(query.toString());
+  const previousSubject = useRef(subjectId);
   const afterCloseFocus = useRef(false);
   useEffect(() => {
-    const key = query.toString();
-    if (key === previousQuery.current) return;
-    previousQuery.current = key;
+    if (subjectId === previousSubject.current) return;
+    previousSubject.current = subjectId;
     document.querySelector(".desk-main")?.scrollTo({ top: 0, behavior: "instant" });
-    // Keep arrow-key focus on the active tab; other navigation announces the new heading.
-    if (!document.activeElement?.matches('[role="tab"]')) heading.current?.focus({ preventScroll: true });
-  }, [query]);
+    heading.current?.focus({ preventScroll: true });
+  }, [subjectId]);
   useEffect(() => {
     if (dialog && modal.current && !modal.current.open) modal.current.showModal();
     if (!dialog && modal.current?.open) modal.current.close();

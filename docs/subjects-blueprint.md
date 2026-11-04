@@ -23,7 +23,7 @@ Subjects shelf: eyebrow and expressive heading, short description, count, Add su
 
 Subject workspace: Back to subjects, subject identity on a green panel, description, optional goal, Edit subject, and a link to the Focus landing page. Do not claim that a timer starts or that the subject is preselected yet. Materials and Notes tabs have proper selected states and arrow-key navigation. Sample materials include chapter folders and titled document/link rows; clicking a row explains that it is a fictional resource, without opening arbitrary external URLs. New subjects show clear empty states. Notes use a read-only illustrative sample until note editing is built.
 
-URL state: `?subject=<id>&tab=materials|notes&folder=<id>` supports browser Back/Forward and sample deep links. New preview subject IDs exist only until the section unmounts; a stale URL must show a clear unavailable state and a way back. Query changes scroll the internal main area to the top and focus the workspace heading without opening a keyboard. Switching shelves preserves each shelf's in-memory edits and clears detail navigation.
+URL state: `?subject=<id>&tab=materials|notes&folder=<id>` supports browser Back/Forward and sample deep links. New preview subject IDs exist only until the section unmounts; a stale URL must show a clear unavailable state and a way back. Opening a different subject scrolls the internal main area to the top and focuses the workspace heading without opening a keyboard. Switching Materials/Quick notes or browsing folders within the same subject preserves scroll and control focus. Switching shelves preserves each shelf's in-memory edits and clears detail navigation.
 
 ## Subject form and rules
 
