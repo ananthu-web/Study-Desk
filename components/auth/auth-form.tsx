@@ -69,6 +69,13 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       }
       setPasswordValue("");
       setConfirmation("");
+      try {
+        sessionStorage.setItem("studydesk-auth-success", JSON.stringify({
+          kind: signup ? "signup" : "login",
+          userId: result.data.user.id,
+          expiresAt: Date.now() + 60_000,
+        }));
+      } catch { /* A confirmation must never prevent navigation when storage is unavailable. */ }
       router.replace("/dashboard");
       router.refresh();
     } catch {

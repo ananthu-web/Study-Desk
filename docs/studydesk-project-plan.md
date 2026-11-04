@@ -420,3 +420,5 @@ Notebook layer order: paint the tabletop pencil and brown notebook before the op
 Lamp/page sequence: begin the first notebook page turn at 2.4 seconds, just after the lamp finishes lighting the desk. Turn over 3.8 seconds and repeat every 10.5 seconds with a calm rest between sheets. Continue while visible, respecting the existing focus, background-tab, and reduced-motion pauses.
 
 Backblaze setup: bucket reported created. Environment placeholders are prepared for `B2_KEY_ID`, `B2_APPLICATION_KEY`, `B2_BUCKET_NAME`, `B2_ENDPOINT`, and `B2_REGION`. Connection and uploads are not implemented or verified. Replace the disclosed application key with a fresh key restricted to the private StudyDesk bucket; do not use account-wide key/bucket administration permissions. Keep actual credentials only in ignored local and deployment environment settings.
+
+Authentication feedback: show a brief, dismissible, theme-aware success notice in the verified dashboard shell after successful signup or login. Consume a matching, short-lived one-use UI receipt; never show confirmation from a URL flag or delay entry for a message. Refresh does not replay it.
