@@ -435,14 +435,36 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 /* Streamed opening/route fallback: no JavaScript or artificial waiting period. */
 .app-loading { min-height: 100svh; min-height: 100dvh; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); background: var(--paper); color: var(--ink); }
 .app-loading-content { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.app-loading-emblem { position: relative; display: grid; place-items: center; width: 112px; height: 112px; margin-bottom: 24px; }
-.app-loading-emblem::before { content: ""; position: absolute; inset: 15px; border: 1px solid var(--line); border-radius: 50%; background: var(--input); }
-.app-loading-orbit { position: absolute; inset: 0; width: 100%; height: 100%; animation: loading-orbit 2.4s linear infinite; }
+.app-loading-emblem { position: relative; display: grid; place-items: center; width: 128px; height: 128px; margin-bottom: 28px; }
+.app-loading-emblem::before { content: ""; position: absolute; inset: 15px; border: 1px solid var(--line); border-radius: 50%; background: var(--input); box-shadow: 0 8px 28px #00000006; }
+.app-loading-orbit { position: absolute; inset: 0; width: 100%; height: 100%; animation: loading-orbit 3.2s linear infinite; }
 .app-loading-track { stroke: var(--line); stroke-width: 1; }
 .app-loading-arc { stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 24 76; }
-.app-loading-book { position: relative; width: 38px; height: 38px; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.app-loading-brand { margin: 0; font-size: 30px; font-weight: 600; line-height: 1.2; letter-spacing: -1.2px; }
+.app-loading-book { position: relative; width: 46px; height: 46px; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.app-loading-brand { margin: 0; font-size: 30px; font-weight: 600; line-height: 1.2; letter-spacing: -1.2px; animation: loading-type-in 650ms cubic-bezier(.2, .7, .3, 1) 120ms both; }
 .app-loading-brand > span:first-child { font-weight: 400; }
-.app-loading-caption { margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.app-loading-caption { margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; animation: loading-type-in 650ms ease-out 240ms both; }
 @keyframes loading-orbit { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .app-loading-orbit { animation: none; } }
+
+/* Book opens once. A single paper leaf turns slowly around the spine. */
+.app-loading-cover-left, .app-loading-cover-right, .app-loading-turning-page { transform-box: view-box; transform-origin: 24px 26px; }
+.app-loading-cover-left { animation: loading-book-open-left 900ms cubic-bezier(.16, 1, .3, 1) both; }
+.app-loading-cover-right { animation: loading-book-open-right 900ms cubic-bezier(.16, 1, .3, 1) both; }
+.app-loading-lines { stroke-dasharray: 1; stroke-dashoffset: 0; animation: loading-lines-in 850ms ease-out 450ms both; }
+.app-loading-turning-page { fill: var(--input); animation: loading-page-turn 4.8s cubic-bezier(.4, 0, .2, 1) 1.2s infinite both; }
+@keyframes loading-book-open-left { from { transform: scaleX(.06); opacity: .25; } to { transform: scaleX(1); opacity: 1; } }
+@keyframes loading-book-open-right { from { transform: scaleX(.06); opacity: .25; } to { transform: scaleX(1); opacity: 1; } }
+@keyframes loading-lines-in { from { stroke-dashoffset: 1; opacity: 0; } to { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes loading-page-turn {
+  0%, 28% { transform: scaleX(1); opacity: 0; }
+  34% { transform: scaleX(1); opacity: .95; }
+  50% { transform: scaleX(.02); opacity: .95; }
+  67% { transform: scaleX(-1); opacity: .95; }
+  77%, 100% { transform: scaleX(-1); opacity: 0; }
+}
+@keyframes loading-type-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .app-loading-orbit, .app-loading-cover-left, .app-loading-cover-right, .app-loading-lines, .app-loading-turning-page, .app-loading-brand, .app-loading-caption { animation: none; }
+  .app-loading-turning-page { display: none; }
+}
