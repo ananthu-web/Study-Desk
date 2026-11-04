@@ -468,3 +468,15 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   .app-loading-orbit, .app-loading-cover-left, .app-loading-cover-right, .app-loading-lines, .app-loading-turning-page, .app-loading-brand, .app-loading-caption { animation: none; }
   .app-loading-turning-page { display: none; }
 }
+
+/* A paper leaf turns about the notebook's diagonal binding in local SVG coordinates. */
+.desk-turning-page { transform-box: view-box; transform-origin: 0 0; animation: desk-page-turn 8s cubic-bezier(.4, 0, .2, 1) 2.2s infinite both; }
+@keyframes desk-page-turn {
+  0%, 60% { transform: scaleX(1); opacity: 0; }
+  65% { transform: scaleX(1); opacity: 1; }
+  77% { transform: scaleX(.025); opacity: 1; }
+  90% { transform: scaleX(-1); opacity: 1; }
+  97%, 100% { transform: scaleX(-1); opacity: 0; }
+}
+.auth-layout:has(form:focus-within) .desk-turning-page { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .desk-turning-page { display: none; animation: none; } }

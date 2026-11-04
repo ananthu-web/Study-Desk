@@ -406,3 +406,5 @@ App icon: use the cream outlined open book with three curved page rules on each 
 Brand consistency: use `StudyBook` for every StudyDesk book mark, including desktop/mobile entry headers, dashboard branding, the Organise feature, and the animated loader. Shared vector paths in `components/study-book-paths.json` also generate app icons, keeping page lines and book proportions consistent. Only the loading variant animates.
 
 Capsule logo sizing: use a 27px book SVG on desktop and 24px on mobile for a slightly stronger brand mark inside the existing StudyDesk capsule.
+
+Welcome illustration notebook: a paper leaf gently turns across the diagonal binding in an 8-second loop, with a long still interval and a 2.2-second initial delay after assembly. Preserve the desk perspective, page rules, and existing lamp/steam/leaf motion. Pause page turns during form focus and hide the moving overlay for reduced motion, leaving the complete static notebook.
