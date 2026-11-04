@@ -1,9 +1,10 @@
 "use client";
+import { StudyBook } from "@/components/study-book";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useLayoutEffect, useRef, type MouseEvent } from "react";
-import { ArrowLeft, ArrowUpRight, BookOpen, Sprout } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Sprout } from "lucide-react";
 import { DeskIllustration } from "@/components/auth/desk-illustration";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -82,7 +83,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <a className="skip-link" href={welcome ? "#welcome-actions" : "#auth-form"}>{welcome ? "Skip to get started" : "Skip to form"}</a>
       <section className="story-panel" aria-label="Welcome to StudyDesk">
         <Link href="/" className="brand" aria-label="StudyDesk welcome">
-          <span className="brand-mark"><BookOpen size={23} strokeWidth={1.6} /></span>
+          <span className="brand-mark"><StudyBook size={23} /></span>
           <span>study<span className="brand-light">desk</span><span className="brand-dot">.</span></span>
         </Link>
         <div className="story-copy">

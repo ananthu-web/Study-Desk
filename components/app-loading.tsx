@@ -1,3 +1,5 @@
+import { StudyBook } from "./study-book";
+
 /** Lightweight server-rendered fallback; visible while a route is preparing. */
 export function AppLoading() {
   return (
@@ -8,18 +10,7 @@ export function AppLoading() {
             <circle className="app-loading-track" cx="56" cy="56" r="49" />
             <circle className="app-loading-arc" cx="56" cy="56" r="49" pathLength="100" />
           </svg>
-          <svg className="app-loading-book" viewBox="0 0 48 48" fill="none">
-            <g className="app-loading-cover-left">
-              <path d="M24 14c-5-4-11-4-18-3v25c7-1 13-1 18 3Z" />
-              <path className="app-loading-lines" pathLength="1" d="M12 18c3-.2 5 .2 7 1.3M12 24c3-.2 5 .2 7 1.3M12 30c3-.2 5 .2 7 1.3" />
-            </g>
-            <g className="app-loading-cover-right">
-              <path d="M24 14c5-4 11-4 18-3v25c-7-1-13-1-18 3Z" />
-              <path className="app-loading-lines" pathLength="1" d="M29 19.3c2-1.1 4-1.5 7-1.3M29 25.3c2-1.1 4-1.5 7-1.3M29 31.3c2-1.1 4-1.5 7-1.3" />
-            </g>
-            <path className="app-loading-turning-page" d="M24 14c5-4 11-4 18-3v25c-7-1-13-1-18 3Z" />
-            <path className="app-loading-spine" d="M24 14v25" />
-          </svg>
+          <StudyBook className="app-loading-book" animated />
         </div>
         <p className="app-loading-brand">study<span>desk</span><span className="brand-dot">.</span></p>
         <p className="app-loading-caption">Making room for focus</p>
