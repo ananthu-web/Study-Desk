@@ -1,3 +1,5 @@
+import { NotebookPage } from "./notebook-page";
+
 /** Original vector artwork: decorative, lightweight, and shared by both themes. */
 export function DeskIllustration({ idPrefix = "desk" }: { idPrefix?: string } = {}) {
   return (
@@ -54,14 +56,7 @@ export function DeskIllustration({ idPrefix = "desk" }: { idPrefix?: string } = 
       <path d="m195 228 37-22m-28 28 44-26m-34 32 45-26m-35 32 44-26m-31 32 39-23" stroke="#A6AE96" strokeOpacity=".75" strokeWidth="1.4" strokeLinecap="round" />
       <path d="m266 266 32-19m-21 25 38-22m-27 28 38-22m-27 28 38-22" stroke="#A6AE96" strokeOpacity=".75" strokeWidth="1.4" strokeLinecap="round" />
       <path d="m274 300 10 6 16-10-10-6Z" fill="#B96F51" />
-      {/* Local axes follow the isometric notebook: x crosses a page, y follows the binding. */}
-      <g transform="matrix(74 40 80 -47 233 268)">
-        <g className="desk-turning-page">
-          <path d="M0 0V1Q.5 1.05 1 1V0Q.5 .05 0 0Z" fill="#F9F4DE" />
-          <path d="M.25 .2V.74M.42 .2V.8M.59 .2V.8M.76 .2V.72" stroke="#A6AE96" strokeOpacity=".65" strokeWidth=".014" strokeLinecap="round" />
-          <path d="M.98 0V1" stroke="#D6CDB4" strokeWidth=".012" />
-        </g>
-      </g>
+      <NotebookPage />
       </g>
 
       {/* Pencil and a small terracotta notebook. */}

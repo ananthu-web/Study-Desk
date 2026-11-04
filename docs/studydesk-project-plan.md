@@ -408,3 +408,5 @@ Brand consistency: use `StudyBook` for every StudyDesk book mark, including desk
 Capsule logo sizing: use a 27px book SVG on desktop and 24px on mobile for a slightly stronger brand mark inside the existing StudyDesk capsule.
 
 Welcome illustration notebook: a paper leaf gently turns across the diagonal binding in an 8-second loop, with a long still interval and a 2.2-second initial delay after assembly. Preserve the desk perspective, page rules, and existing lamp/steam/leaf motion. Pause page turns during form focus and hide the moving overlay for reduced motion, leaving the complete static notebook.
+
+Notebook realism refinement: replace the flat scale flip with a flexible sheet rendered as 22 shaded strips. Keep the binding fixed, project the raised sheet into the desk perspective, curl the free edge, move page rules with the paper, and cast a changing shadow. Use a 10.5-second cycle with a long rest and gentle settling. Limit drawing to about 30fps and stop scheduling frames when offscreen, when the tab is hidden, while a form is focused, or when reduced motion is enabled. No claim of photorealism: the illustration retains its existing vector art style.
