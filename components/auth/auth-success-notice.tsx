@@ -21,7 +21,7 @@ export function AuthSuccessNotice({ userId }: { userId?: string }) {
   }, [userId]);
   useEffect(() => {
     if (!message || paused) return;
-    const timeout = setTimeout(() => setMessage(""), 8000);
+    const timeout = setTimeout(() => setMessage(""), 4000);
     return () => clearTimeout(timeout);
   }, [message, paused]);
   return <div className="auth-success-notice" role="status" aria-live="polite" aria-atomic="true" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
