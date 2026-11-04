@@ -83,7 +83,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <a className="skip-link" href={welcome ? "#welcome-actions" : "#auth-form"}>{welcome ? "Skip to get started" : "Skip to form"}</a>
       <section className="story-panel" aria-label="Welcome to StudyDesk">
         <Link href="/" className="brand" aria-label="StudyDesk welcome">
-          <span className="brand-mark"><StudyBook size={23} /></span>
+          <span className="brand-mark"><StudyBook size={27} /></span>
           <span>study<span className="brand-light">desk</span><span className="brand-dot">.</span></span>
         </Link>
         <div className="story-copy">

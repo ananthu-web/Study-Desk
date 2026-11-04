@@ -252,7 +252,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   .brand { font-size: 25px; gap: 8px; min-height: 44px; padding: 0 14px 0 10px; border: 1px solid var(--muted); border-radius: 999px; background: var(--note); }
   .brand:focus-visible { outline-color: var(--accent); }
   .brand-mark { color: var(--accent); width: 24px; height: 24px; border: 0; border-radius: 0; }
-  .brand-mark svg { width: 20px; }
+  .brand-mark svg { width: 24px; height: 24px; flex-shrink: 0; }
   .story-copy, .story-description, .story-bottom, .illustration-wrap { display: none; }
   .form-panel { grid-template-rows: minmax(0, 1fr) auto; padding: 0; }
   .form-topbar { position: absolute; top: var(--mobile-header-top); right: max(20px, env(safe-area-inset-right)); z-index: 2; }

@@ -404,3 +404,5 @@ Loading motion refinement: the outlined book unfolds once over 900ms, page rules
 App icon: use the cream outlined open book with three curved page rules on each side, on the accepted green background. Browser, Apple touch, regular install icons, and maskable icons are generated from a shared SVG source by `node scripts/generate-icons.mjs`. Keep the maskable book within the central safe area.
 
 Brand consistency: use `StudyBook` for every StudyDesk book mark, including desktop/mobile entry headers, dashboard branding, the Organise feature, and the animated loader. Shared vector paths in `components/study-book-paths.json` also generate app icons, keeping page lines and book proportions consistent. Only the loading variant animates.
+
+Capsule logo sizing: use a 27px book SVG on desktop and 24px on mobile for a slightly stronger brand mark inside the existing StudyDesk capsule.
