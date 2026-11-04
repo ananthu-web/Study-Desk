@@ -4,9 +4,16 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: { default: "StudyDesk — Make room for focus", template: "%s · StudyDesk" },
   description: "A little space for your big ambitions. Your subjects, plans, and focus, together at one desk.",
+  applicationName: "StudyDesk",
+  appleWebApp: { capable: true, title: "StudyDesk", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f1efe8" },
+    { media: "(prefers-color-scheme: dark)", color: "#202120" },
+  ],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",

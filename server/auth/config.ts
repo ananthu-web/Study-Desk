@@ -19,5 +19,7 @@ export function getAuthConfig() {
   if (process.env.NODE_ENV === "production" && url.protocol !== "https:") throw new AuthUnavailableError();
   const trustedOrigins = [url.origin];
   if (process.env.NODE_ENV !== "production") trustedOrigins.push("http://127.0.0.1:3000", "http://localhost:3000");
+  const lanHost = process.env.DEV_LAN_HOST?.trim();
+  if (process.env.NODE_ENV !== "production" && lanHost && /^[\d.]+$/.test(lanHost)) trustedOrigins.push(`http://${lanHost}:3000`);
   return { uri, secret, databaseName, baseURL: url.origin, trustedOrigins: [...new Set(trustedOrigins)] };
 }

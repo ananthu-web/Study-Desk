@@ -14,6 +14,8 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const welcome = pathname === "/";
   const contentRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const departureHeight = useRef<number | null>(null);
   const navigating = useRef(false);
   const mounted = useRef(false);
 
@@ -30,9 +32,24 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       heading?.focus({ preventScroll: true });
     }
     mounted.current = true;
+    const from = departureHeight.current;
+    departureHeight.current = null;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !content.animate) return;
     const entrance = content.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: "ease-out" });
-    return () => entrance.cancel();
+    // On phones the green panel fills the screen on welcome and fits its content on login and sign-up.
+    // The panel stays vertically centred, so its top and bottom edges move together while the content
+    // keeps its final size and position (centred, clipped by the panel) for the whole animation.
+    const panel = panelRef.current;
+    const to = panel?.getBoundingClientRect().height;
+    if (!panel || from === null || to === undefined || Math.abs(from - to) <= 1) return () => entrance.cancel();
+    const contentHeight = content.getBoundingClientRect().height;
+    const release = () => { panel.style.justifyContent = ""; content.style.flex = ""; content.style.height = ""; };
+    panel.style.justifyContent = "center";
+    content.style.flex = "none";
+    content.style.height = `${contentHeight}px`;
+    const resize = panel.animate([{ height: `${from}px` }, { height: `${to}px` }], { duration: 300, easing: "cubic-bezier(.2, 0, 0, 1)" });
+    resize.addEventListener("finish", release);
+    return () => { entrance.cancel(); resize.cancel(); release(); };
   }, [pathname]);
 
   async function navigate(event: MouseEvent<HTMLElement>) {
@@ -44,6 +61,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
     event.preventDefault();
     if (navigating.current) return;
     navigating.current = true;
+    departureHeight.current = panelRef.current?.getBoundingClientRect().height ?? null;
     const content = contentRef.current;
     let departure: Animation | undefined;
     if (content?.animate && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -54,6 +72,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       router.push(destination.pathname + destination.search, { scroll: false });
     } catch {
       departure?.cancel();
+      departureHeight.current = null;
       navigating.current = false;
     }
   }
@@ -83,7 +102,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           <ThemeToggle />
         </header>
         <div className="form-main">
-          <div className={`entry-panel ${welcome ? "entry-welcome" : "entry-form"}`}>
+          <div className={`entry-panel ${welcome ? "entry-welcome" : "entry-form"}`} ref={panelRef}>
             <div className="entry-panel-content" ref={contentRef} key={pathname}>
               {!welcome && <Link href="/" className="entry-back"><ArrowLeft size={16} aria-hidden="true" /><span>Back to welcome</span></Link>}
               {children}
