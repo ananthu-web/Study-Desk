@@ -198,7 +198,7 @@ Define folder depth, duplicate names, allowed file types, maximum upload size, p
 
 Use a storage interface to support local development and Backblaze B2 integration.
 
-**Frontend status (4 November 2026):** The Subjects shelf, temporary Add/Edit/Delete flows, six colour choices, optional daily goal, individual workspace, Materials/Quick notes tabs, sample folder navigation, and explanatory resource previews are implemented. New accounts start with an empty shelf; examples are separate and clearly labelled. Query URLs support subject/tab/folder navigation and stale-preview recovery. No subject persistence, B2 uploads, real resource viewing, or note writing is connected yet. See [Subjects blueprint](subjects-blueprint.md).
+**Frontend status (4 November 2026):** The Subjects shelf, temporary Add/Edit/Delete flows, six colour choices, optional daily goal, individual workspace, Materials/Quick notes tabs, sample folder navigation, and explanatory resource previews are implemented. New accounts start with an empty shelf; examples are separate and clearly labelled. Query URLs support subject/tab/folder navigation and stale-preview recovery. Own subjects now persist through authenticated MongoDB APIs; the separate sample shelf remains temporary. B2 uploads, folder CRUD, real resource viewing, and note writing are not connected yet. See [Subjects blueprint](subjects-blueprint.md).
 
 **Acceptance:** Students can securely manage subjects, folders, files, links, and notes. Every operation, including file access, checks ownership.
 
@@ -397,7 +397,7 @@ Judge the result by clarity, character, consistency, accessibility, reliability,
 
 ## 15. Next action
 
-Review Stage 2's dashboard frontend on a physical iPhone and confirm its direction before integrating study data. The local design preview is `/preview/dashboard`; signed-in users use `/dashboard` and can switch between their empty desk and an explicitly labelled sample desk. Next feature work is reviewing the Subjects frontend, then integrating authenticated MongoDB subject operations. Folder CRUD and B2 uploads follow afterward. Stage 1 still needs an email provider for recovery/verification and deployed authentication checks before public launch.
+Review Stage 2's dashboard frontend on a physical iPhone and confirm its direction before integrating study data. The local design preview is `/preview/dashboard`; signed-in users use `/dashboard` and can switch between their empty desk and an explicitly labelled sample desk. Subject persistence is implemented and verified against an isolated database. Next feature work is nested folder CRUD, followed by private B2 uploads and resource viewing. Physical iPhone review of the deployed saved-subject flow remains. Stage 1 still needs an email provider for recovery/verification and deployed authentication checks before public launch.
 
 Guest entry behaviour: new visitors, logged-out users, and users with expired or invalid sessions land on the welcome page (`/`), including when opening a protected dashboard URL. Successful logout returns to welcome. The installed app starts at `/`. Valid signed-in visitors are redirected from entry pages to `/dashboard`; explicit Sign in and Get started actions still open their respective forms.
 
@@ -422,3 +422,5 @@ Lamp/page sequence: begin the first notebook page turn at 2.4 seconds, just afte
 Backblaze setup: bucket reported created. Environment placeholders are prepared for `B2_KEY_ID`, `B2_APPLICATION_KEY`, `B2_BUCKET_NAME`, `B2_ENDPOINT`, and `B2_REGION`. Connection and uploads are not implemented or verified. Replace the disclosed application key with a fresh key restricted to the private StudyDesk bucket; do not use account-wide key/bucket administration permissions. Keep actual credentials only in ignored local and deployment environment settings.
 
 Authentication feedback: show a brief, dismissible, theme-aware success notice in the verified dashboard shell after successful signup or login. Consume a matching, short-lived one-use UI receipt; never show confirmation from a URL flag or delay entry for a message. Refresh does not replay it.
+
+Subject persistence update: real accounts can list, add, edit, and delete empty subjects with server validation and ownership checks; Home reads saved subjects. Keep sample material/note previews distinct from account data. Deleting subjects with content remains blocked until reliable file cleanup is available. API/database and phone-browser tests plus production build passed; see Subjects blueprint for evidence and limits.

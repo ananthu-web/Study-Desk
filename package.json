@@ -7,7 +7,8 @@
     "build": "next build --webpack",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test:auth": "node scripts/test-auth.mjs"
+    "test:auth": "node scripts/test-auth.mjs",
+    "test:subjects": "node scripts/test-subjects.mjs"
   },
   "dependencies": {
     "@better-auth/mongo-adapter": "^1.7.12",
