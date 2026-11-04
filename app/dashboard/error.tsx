@@ -1,5 +1,5 @@
 "use client";
 
 export default function DashboardError({ reset }: { reset: () => void }) {
-  return <main className="account-dashboard"><section className="account-welcome"><h1>A moment, please.</h1><p>Your study space couldn't load. Please try again.</p><button type="button" className="submit-button" onClick={reset}>Try again</button></section></main>;
+  return <section className="desk-section-empty"><p className="desk-kicker">A MOMENT, PLEASE</p><h1>Your desk couldn’t load.</h1><p>Try again to return to your study space.</p><button type="button" className="desk-primary" onClick={reset}>Try again</button></section>;
 }

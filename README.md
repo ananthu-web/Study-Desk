@@ -29,7 +29,7 @@ npm run typecheck
 npm run build
 ```
 
-The production build uses Next.js's supported Webpack compiler because Turbopack encountered a worker-port restriction in the execution environment. Development uses the default Next.js compiler.
+The production build uses Next.js's supported Webpack compiler because Turbopack encountered a worker-port restriction in the execution environment. Development also uses Webpack.
 
 `npm run test:auth` runs integration checks against a separate application server at `http://127.0.0.1:3001` and a local MongoDB replica set at port 27028, using `studydesk_auth_test`. Start the local replica set and the second dev server with these test-only environment overrides: `STUDYDESK_AUTH_TEST=1`, `MONGODB_URI=mongodb://127.0.0.1:27028/?replicaSet=studydesk-test`, `MONGODB_DB=studydesk_auth_test`, and `BETTER_AUTH_URL=http://127.0.0.1:3001`; run the second server on port 3001. The second server uses an ignored `.next-auth-test` build directory. The test runner refuses remote servers/databases and removes only the random accounts it creates. It does not run against Atlas.
 
@@ -41,10 +41,14 @@ The production build uses Next.js's supported Webpack compiler because Turbopack
 - Persistent light/dark theme selection.
 - Client-side validation, password visibility, and server-side input validation.
 - Real registration, sign-in, persistent database-backed sessions, and logout.
-- Protected `/dashboard` account screen and private `/api/me` endpoint.
+- Protected dashboard and shared app shell with mobile tabs, desktop navigation, section landing pages, and private `/api/me` endpoint.
+- First-use and explicitly labelled sample dashboard views, goal/subject preview dialogs, and temporary sample plan completion.
+- Persistent Light/Dark/System preferences in Settings.
 - Cookie-only proxy redirects backed by authoritative session checks in pages and APIs.
 - Database-backed rate limits and trusted-origin checks.
 
-The dashboard is an account confirmation screen; study features come in later stages. Password recovery and email verification are not connected yet because no email provider is configured. Do not treat Stage 1 as fully complete or launch publicly until those account flows and deployment settings are reviewed. The frontend remains viewable without database configuration; actual account actions return a clear unavailable message until configuration works.
+The dashboard frontend is implemented; subjects, tracking, plans, and events remain unconnected. Real accounts start with an empty desk; sample data is explicitly labelled and local interactions are temporary. Use `/preview/dashboard` locally for a fictional student design preview without logging in; the preview is unavailable in production. Password recovery and email verification are not connected yet because no email provider is configured. Do not treat Stage 1 as fully complete or launch publicly until those account flows and deployment settings are reviewed. The frontend remains viewable without database configuration; actual account actions return a clear unavailable message until configuration works.
 
 See [the project plan](docs/studydesk-project-plan.md), [login frontend blueprint](docs/login-frontend-blueprint.md), and [authentication backend blueprint](docs/authentication-backend-blueprint.md).
+
+See [the dashboard frontend blueprint](docs/dashboard-frontend-blueprint.md) for Stage 2 interaction and integration boundaries.

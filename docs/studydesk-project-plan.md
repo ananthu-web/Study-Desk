@@ -1,6 +1,6 @@
 # StudyDesk — Project Plan and UI/UX Brief
 
-Updated: 25 October 2026
+Updated: 4 November 2026
 
 ## 1. Product
 
@@ -174,6 +174,8 @@ Dashboard content:
 - Upcoming deadlines.
 
 Design first-use and populated states. Label fixture data during development. Connect dependent summaries as later features become ready.
+
+**Frontend status (4 November 2026):** Implemented the shared authenticated shell, desktop sidebar, mobile bottom tabs, dashboard first-use and labelled sample views, goal-preview dialog, temporary agenda completion controls, subject-preview dialogs, and section landing pages. Settings supports Light/Dark/System and existing logout. No subject, timer, plan, or calendar data is persisted yet. See [dashboard frontend blueprint](dashboard-frontend-blueprint.md). Development-only review route: `/preview/dashboard`; production does not expose its design preview.
 
 **Acceptance:** Navigation, theme behaviour, responsive layout, and dashboard states work; dependencies are documented.
 
@@ -393,7 +395,7 @@ Judge the result by clarity, character, consistency, accessibility, reliability,
 
 ## 15. Next action
 
-The student can now create and sign into an account using the verified Atlas configuration. Choose an email provider to finish password recovery and email verification. Basic authentication has passed isolated database/API and mobile browser checks; Stage 1 remains incomplete until the remaining account flows and deployment settings are verified.
+Review Stage 2's dashboard frontend on a physical iPhone and confirm its direction before integrating study data. The local design preview is `/preview/dashboard`; signed-in users use `/dashboard` and can switch between their empty desk and an explicitly labelled sample desk. Next feature work is the Subjects blueprint and implementation. Stage 1 still needs an email provider for recovery/verification and deployed authentication checks before public launch.
 
 Guest entry behaviour: new visitors, logged-out users, and users with expired or invalid sessions land on the welcome page (`/`), including when opening a protected dashboard URL. Successful logout returns to welcome. The installed app starts at `/`. Valid signed-in visitors are redirected from entry pages to `/dashboard`; explicit Sign in and Get started actions still open their respective forms.
 
