@@ -2,6 +2,7 @@
 
 :root {
   color-scheme: light;
+  --browser-chrome: var(--paper);
   --paper: #f1efe8;
   --paper-texture: url("/textures/paper-grain.svg");
   --ink: #263a31;
@@ -40,7 +41,16 @@
 }
 
 * { box-sizing: border-box; }
-html { background-color: var(--paper); }
+html { background-color: var(--browser-chrome); }
+/* iOS draws white status icons over the installed app. Give them a green safe area. */
+@media (display-mode: standalone) {
+  :root { --browser-chrome: var(--panel); }
+  html::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--browser-chrome); pointer-events: none; z-index: 40; }
+}
+@media (max-width: 800px) {
+  :root[data-workspace="dashboard"] { --browser-chrome: #2b6350; }
+  :root[data-workspace="dashboard"][data-theme="dark"] { --browser-chrome: #2d6049; }
+}
 body { position: relative; isolation: isolate; margin: 0; background: var(--paper); background-image: var(--paper-texture); background-size: 180px 180px; color: var(--ink); font-family: Arial, Helvetica, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 body::before, body::after { content: ""; position: fixed; top: 5dvh; bottom: 5dvh; width: clamp(48px, 10vw, 144px); z-index: -1; pointer-events: none; background: url("/graphics/study-margin.svg?v=3") center / 100% 100% no-repeat; opacity: .6; }
 body::before { left: 0; }
@@ -502,7 +512,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .desk-topbar-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 .desk-icon-button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--desk-surface); display: inline-flex; align-items: center; justify-content: center; color: var(--ink); flex-shrink: 0; }
 .desk-topbar .theme-toggle { width: 44px; height: 44px; }
-.desk-main { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 28px clamp(24px, 3.5vw, 56px) 16px; scrollbar-width: thin; scroll-padding-block: 24px; }
+.desk-main { flex: 1 1 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 28px clamp(24px, 3.5vw, 56px) 16px; scrollbar-width: thin; scroll-padding-block: 24px; }
 .desk-main > * { max-width: 1100px; margin-left: auto; margin-right: auto; }
 .desk-main:focus { outline: none; }
 .desk-preview-label { padding: 8px 12px; margin-top: 0; margin-bottom: 20px; border: 1px dashed var(--line); border-radius: 8px; color: var(--muted); font-size: 12px; }
