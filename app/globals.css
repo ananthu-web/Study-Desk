@@ -40,6 +40,7 @@
 }
 
 * { box-sizing: border-box; }
+html { background-color: var(--paper); }
 body { position: relative; isolation: isolate; margin: 0; background: var(--paper); background-image: var(--paper-texture); background-size: 180px 180px; color: var(--ink); font-family: Arial, Helvetica, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 body::before, body::after { content: ""; position: fixed; top: 5dvh; bottom: 5dvh; width: clamp(48px, 10vw, 144px); z-index: -1; pointer-events: none; background: url("/graphics/study-margin.svg?v=3") center / 100% 100% no-repeat; opacity: .6; }
 body::before { left: 0; }

@@ -39,3 +39,10 @@ Subjects frontend update: see [Subjects blueprint](subjects-blueprint.md). The s
 Saved subject integration: Your desk now reads authenticated MongoDB subjects, shows a real count and up to three recent subjects, and links into their saved workspaces. Sample desk retains fixtures. Goal/time/planner/calendar summaries are still previews. Subject load failures show Retry instead of a false empty state.
 
 Subjects completion update: the live subject workspace now has saved folders, B2 PDFs, links, quick notes, and recursive cleanup. Sample desk/subjects remain explicit fixtures. See Subjects and storage blueprints for deployment settings.
+
+
+Status-bar theme update: a root-level ThemeSync now keeps browser theme metadata aligned with the selected app theme across welcome, authentication, dashboard, and settings. The first body script applies saved/system appearance after head metadata is parsed and before visible content. Theme changes, OS appearance changes (System only), cross-tab storage, and pageshow restoration update both document colours and theme metadata. The root background uses the paper token. Existing default Apple status-bar style and safe-area layout remain. Actual installed-iPhone rendering must be checked after deployment; no native status-bar guarantee is inferred from desktop browser tests.
+
+The runtime owns one theme-colour meta element rather than modifying a React-managed static viewport element before hydration; this avoids duplicate tags or a restored server colour when a saved dark theme hydrates. The manifest retains warm stone as the install/launch fallback.
+
+Status-bar verification: production build and TypeScript passed (with an existing Next.js security advisory). Chrome checks at 320px/390px verified saved Light/Dark against the opposite OS appearance, reload, System changes, both theme controls, navigation, cross-tab storage, pageshow restoration, welcome and startup with hydration scripts blocked. One theme-colour tag and matching document background; no runtime errors. This does not verify native iPhone status-bar pixels.

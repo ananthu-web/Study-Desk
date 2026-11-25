@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { CalendarDays, House, LayoutList, Settings2, Timer, ArrowUpRight } from "lucide-react";
 import { StudyBook } from "@/components/study-book";
-import { ThemeSync } from "./theme-preference";
 import "./dashboard-polish.css";
 import { AuthSuccessNotice } from "@/components/auth/auth-success-notice";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -55,7 +54,7 @@ export function AppShell({ children, name, userId, base = "/dashboard", preview 
     const active = pathname === base + path;
     return <Link key={path} href={base + path} className={`desk-nav-link${active ? " is-active" : ""}${mobile && path === "/focus" ? " is-fab" : ""}`} aria-current={active ? "page" : undefined}><Icon size={21} aria-hidden="true" /><span>{label}</span></Link>;
   });
-  return <div className={`desk-app${pathname === base ? " is-home" : ""}${topbarHidden ? " is-topbar-hidden" : ""}`}><ThemeSync /><AuthSuccessNotice userId={preview ? undefined : userId} />
+  return <div className={`desk-app${pathname === base ? " is-home" : ""}${topbarHidden ? " is-topbar-hidden" : ""}`}><AuthSuccessNotice userId={preview ? undefined : userId} />
     <a href="#desk-main" className="skip-link">Skip to your desk</a>
     <aside className="desk-sidebar">
       <Link href={base} className="desk-brand"><StudyBook size={29} /><span>study<span className="brand-light">desk</span><span className="brand-dot">.</span></span></Link>
