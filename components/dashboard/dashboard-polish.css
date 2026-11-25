@@ -363,6 +363,6 @@
 @media (max-width: 800px) {
   /* The bar shrinks to the notch/status-bar strip, so content never sits under the notch. */
   .desk-app .desk-topbar { align-items: flex-start; box-sizing: border-box; overflow: hidden; height: var(--topbar-h, auto); position: relative; z-index: 4; transition: height .26s cubic-bezier(.2, 0, 0, 1), padding-bottom .26s cubic-bezier(.2, 0, 0, 1); }
-  .desk-app.is-topbar-hidden .desk-topbar { height: env(safe-area-inset-top, 0px); min-height: 0; padding-top: env(safe-area-inset-top, 0px); padding-bottom: 0; }
+  .desk-app.is-topbar-hidden .desk-topbar { background: var(--browser-chrome); height: env(safe-area-inset-top, 0px); min-height: 0; padding-top: env(safe-area-inset-top, 0px); padding-bottom: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .desk-app .desk-topbar { transition: none; } }

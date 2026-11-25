@@ -42,14 +42,9 @@
 
 * { box-sizing: border-box; }
 html { background-color: var(--browser-chrome); }
-/* iOS draws white status icons over the installed app. Give them a green safe area. */
+/* The installed status inset follows the currently visible surface. */
 @media (display-mode: standalone) {
-  :root { --browser-chrome: var(--panel); }
   html::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--browser-chrome); pointer-events: none; z-index: 40; }
-}
-@media (max-width: 800px) {
-  :root[data-workspace="dashboard"] { --browser-chrome: #2b6350; }
-  :root[data-workspace="dashboard"][data-theme="dark"] { --browser-chrome: #2d6049; }
 }
 body { position: relative; isolation: isolate; margin: 0; background: var(--paper); background-image: var(--paper-texture); background-size: 180px 180px; color: var(--ink); font-family: Arial, Helvetica, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 body::before, body::after { content: ""; position: fixed; top: 5dvh; bottom: 5dvh; width: clamp(48px, 10vw, 144px); z-index: -1; pointer-events: none; background: url("/graphics/study-margin.svg?v=3") center / 100% 100% no-repeat; opacity: .6; }
