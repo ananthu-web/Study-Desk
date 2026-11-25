@@ -395,3 +395,38 @@
   .desk-app .desk-art-steam path { opacity: .45; }
 }
 @media (prefers-reduced-motion: reduce) { .desk-app .desk-topbar { transition: none; } }
+
+/* Section loading keeps the same green hero and rounded paper sheet as real pages. */
+.desk-app:has(.desk-loading-sheet) .desk-main { background: var(--paper); }
+.desk-app:has(.desk-hero) .desk-main::before { background: var(--hero); }
+.desk-app .desk-loading-hero { min-height: 180px; padding-top: 22px; }
+.desk-loading-line { display: block; height: 12px; border-radius: 999px; background: var(--desk-soft, var(--note)); }
+.desk-loading-hero .desk-loading-line { background: #ffffff26; margin-bottom: 16px; }
+.desk-loading-hero .is-kicker { width: 120px; height: 9px; }
+.desk-loading-hero .is-title { width: min(280px, 78%); height: 30px; }
+.desk-loading-hero .is-description { width: min(360px, 92%); margin-bottom: 0; }
+.desk-app .desk-loading-sheet { min-height: 420px; padding-bottom: 24px; }
+.desk-loading-status { display: flex; align-items: center; gap: 16px; padding: 4px 6px; color: var(--muted); }
+.desk-loading-status > p { margin: 0; font-size: 14px; line-height: 1.5; }
+.desk-section-spinner { position: relative; display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; color: var(--accent); }
+.desk-section-spinner::before { content: ""; position: absolute; inset: -3px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: desk-section-spin 1.2s linear infinite; }
+.desk-loading-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.desk-loading-card { display: grid; align-content: start; gap: 12px; padding: 20px 16px; min-height: 160px; border-radius: 20px; background: var(--desk-surface); border: 1px solid var(--line); }
+.desk-loading-icon { display: block; width: 36px; height: 36px; border-radius: 12px; background: var(--desk-soft); margin-bottom: 4px; }
+.desk-loading-card .is-card-title { width: 78%; height: 14px; }
+.desk-loading-card .is-short { width: 62%; }
+.desk-loading-sheet .desk-loading-recovery { margin: 0; padding-inline: 6px; }
+@keyframes desk-section-spin { to { transform: rotate(360deg); } }
+/* Content stays visible from the first frame; animate only at section arrival. */
+.desk-main > .desk-hero:not(.desk-loading-hero) > .desk-heading,
+.desk-main > .desk-hero:not(.desk-loading-hero) > .desk-date-row,
+.desk-main > .desk-sheet:not(.desk-loading-sheet),
+.desk-main > .subject-workspace-hero { animation: desk-section-arrive 160ms ease-out both; }
+@keyframes desk-section-arrive { from { opacity: .92; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .desk-section-spinner::before,
+  .desk-main > .desk-hero > .desk-heading,
+  .desk-main > .desk-hero > .desk-date-row,
+  .desk-main > .desk-sheet,
+  .desk-main > .subject-workspace-hero { animation: none !important; }
+}
