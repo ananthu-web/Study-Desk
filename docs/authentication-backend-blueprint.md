@@ -75,3 +75,6 @@ Success-notice verification: production build and TypeScript passed. A temporary
 
 
 Render performance: `requireSession` uses React `cache` to deduplicate repeated layout/page validation within a single server render. It does not share sessions between HTTP requests or users; `readSession` and API ownership checks remain authoritative and unchanged. No cookie-session cache was enabled.
+
+
+Deployment latency diagnosis: read-only Atlas hello/topology diagnostics reported AWS AP_SOUTH_1 (Mumbai). The public Vercel response trace included bom1::iad1, showing a Mumbai ingress and US East function execution. Configure the project-level Vercel function region as bom1 in vercel.json, keeping the existing storage cron. This removes the confirmed cross-region database round trips; it does not by itself prove the cause of a reported minute-long stall. Public probes during diagnosis returned welcome in ~0.5s, unauthenticated session in ~1.1s and guest redirect in ~0.3s, so authenticated/PWA-specific stalls still need the actual failing request. Slow/error session checks now log only total/init/lookup timing, stage, outcome and function region in Vercel logs—no cookies, tokens, student data or raw DB error strings. Verify function region after deployment and inspect these timing logs if the stall persists.
