@@ -999,3 +999,14 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   .pdf-reader-controls > span { font-size: 12px; }
   .pdf-reader-surface { padding: 10px 6px max(10px, env(safe-area-inset-bottom)); }
 }
+
+/* The shared shell stays interactive while a protected section is loading. */
+.desk-route-loading { padding: 28px 20px; color: var(--muted); min-height: 300px; }
+.desk-route-loading > svg { color: var(--accent); }
+.desk-route-loading > p { font-size: 15px; margin: 12px 0 24px; }
+.desk-route-skeleton { display: grid; gap: 14px; }
+.desk-route-skeleton > span { display: block; height: 86px; background: var(--desk-soft); border-radius: 20px; }
+
+.desk-nav-link { position: relative; }
+.desk-nav-pending { position: absolute; left: 14px; right: 14px; bottom: 5px; height: 3px; border-radius: 999px; background: currentColor; opacity: 0; pointer-events: none; }
+.desk-nav-pending[data-pending="true"] { opacity: 1; }

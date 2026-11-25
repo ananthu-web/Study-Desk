@@ -56,7 +56,9 @@ export function SubjectsSection({ base = "/dashboard", preview = false }: { base
     if (id) params.set("subject", id);
     if (nextTab === "notes") params.set("tab", nextTab);
     if (folder) params.set("folder", folder);
-    router.push(pathname + (params.size ? "?" + params.toString() : ""), { scroll: false });
+    const href = pathname + (params.size ? "?" + params.toString() : "");
+    // This is view state on the current page. Data APIs still verify the session.
+    if (href !== location.pathname + location.search) window.history.pushState(null, "", href);
   }
   function close(force = false) {
     if (requestActive.current && !force) return;

@@ -69,14 +69,45 @@ export function ThemeSync() {
       if (!frame) frame = requestAnimationFrame(() => { frame = 0; syncBrowserChrome(); });
     };
     const sync = () => applyTheme(savedTheme());
-    const observer = new MutationObserver(records => {
-      if (records.some(record => record.type === "childList" || (record.target instanceof Element && record.target.matches(".desk-app, .app-loading, dialog")))) refreshChrome();
-    });
-    // Includes streamed loading/ready content and the collapsing header's state.
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class", "style", "open"] });
-    document.addEventListener("scroll", refreshChrome, { capture: true, passive: true });
-    document.addEventListener("transitionend", refreshChrome, true);
+    let app: HTMLElement | null = null;
+    let main: HTMLElement | null = null;
+    let intersections: IntersectionObserver | null = null;
+    const observeSurfaces = () => {
+      intersections?.disconnect();
+      if (!main) return;
+      // A one-pixel band at the top of the scroller: callbacks happen only when
+      // a surface crosses it, rather than reading geometry on every scroll frame.
+      intersections = new IntersectionObserver(refreshChrome, {
+        root: main, rootMargin: `0px 0px -${Math.max(0, main.clientHeight - 1)}px 0px`, threshold: 0,
+      });
+      main.querySelectorAll(".desk-hero, .desk-sheet, .desk-footer").forEach(surface => intersections!.observe(surface));
+    };
+    const appObserver = new MutationObserver(refreshChrome);
+    const contentObserver = new MutationObserver(() => { observeSurfaces(); refreshChrome(); });
+    const sizeObserver = new ResizeObserver(() => { observeSurfaces(); refreshChrome(); });
+    const bindScene = () => {
+      const nextApp = document.querySelector<HTMLElement>(".desk-app");
+      const nextMain = nextApp?.querySelector<HTMLElement>(".desk-main") ?? null;
+      if (nextApp !== app) {
+        appObserver.disconnect(); app = nextApp;
+        if (app) appObserver.observe(app, { attributes: true, attributeFilter: ["class"] });
+      }
+      if (nextMain !== main) {
+        contentObserver.disconnect(); sizeObserver.disconnect(); intersections?.disconnect(); main = nextMain;
+        if (main) {
+          contentObserver.observe(main, { childList: true });
+          sizeObserver.observe(main);
+          observeSurfaces();
+        }
+      }
+    };
+    // Watch only scene containers, not every card, SVG, editor and text mutation.
+    const sceneObserver = new MutationObserver(() => { bindScene(); refreshChrome(); });
+    sceneObserver.observe(document.body, { childList: true });
+    document.addEventListener("toggle", refreshChrome, true);
+    document.addEventListener("close", refreshChrome, true);
     window.addEventListener("resize", refreshChrome);
+    bindScene();
     sync();
     media.addEventListener("change", sync);
     phone.addEventListener("change", sync);
@@ -85,10 +116,10 @@ export function ThemeSync() {
     window.addEventListener("studydesk-theme-change", sync);
     window.addEventListener("pageshow", sync);
     return () => {
-      observer.disconnect();
+      sceneObserver.disconnect(); appObserver.disconnect(); contentObserver.disconnect(); sizeObserver.disconnect(); intersections?.disconnect();
       cancelAnimationFrame(frame);
-      document.removeEventListener("scroll", refreshChrome, true);
-      document.removeEventListener("transitionend", refreshChrome, true);
+      document.removeEventListener("toggle", refreshChrome, true);
+      document.removeEventListener("close", refreshChrome, true);
       window.removeEventListener("resize", refreshChrome);
       media.removeEventListener("change", sync);
       phone.removeEventListener("change", sync);

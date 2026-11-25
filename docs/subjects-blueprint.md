@@ -63,3 +63,6 @@ Phone Chrome checks passed real browser B2 upload, PDF page navigation/zoom, res
 Phone subject shelf: display two subject cards per row, including at 320px. Use compact cover artwork, responsive 20–24px subject headings and reduced horizontal padding. Keep descriptions and goals visible with wrapping, preserve 44px edit targets, and let cards grow for long content. Retain the folder/paper styling, colour choices and Add subject tile. Tablet/desktop layouts and individual subject workspaces are unchanged.
 
 Two-column phone verification: browser checks passed at 320/360/390/430/560px with no horizontal/text overflow, preserved 44px edit targets and wrapping for long names/descriptions. Subject opening still works and desktop retains three columns. Inspected the light phone screenshot and captured both themes. CSS-only change; no data or backend changes.
+
+
+Performance: subject, tab and folder URL changes use the Next-integrated native History API because these query parameters select client views, not server page data. Back/Forward still works and tab/folder changes keep scroll position. Opening a different subject retains its existing scroll reset. Material/note APIs continue verifying every request. Browser checks confirm zero RSC requests for these local view changes.
