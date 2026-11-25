@@ -1010,3 +1010,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .desk-nav-link { position: relative; }
 .desk-nav-pending { position: absolute; left: 14px; right: 14px; bottom: 5px; height: 3px; border-radius: 999px; background: currentColor; opacity: 0; pointer-events: none; }
 .desk-nav-pending[data-pending="true"] { opacity: 1; }
+
+.desk-loading-recovery { margin: -8px 0 24px; max-width: 440px; }
+.desk-loading-recovery > p { font-size: 14px; line-height: 1.6; margin: 0 0 16px; }
+.desk-recovery-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 24px; }
